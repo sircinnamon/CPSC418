@@ -1,0 +1,30 @@
+Files
+-Client.java
+-CryptoUtil.java
+-Server.java
+-ServerThread.java
+
+To run:
+javac *.java
+java Server port# (optional: debug)
+java Client serverip(ie: localhost) port#
+
+Client prompts for filename, destination filename
+client connects to server making new serverthread
+server generates p, g and its secret key s
+server sends p
+client returns a 0 byte as an ack
+server sends g
+client returns a 0 byte as an ack, and generates its secret key c
+client sends C = g^c to server
+server returns S = g^s
+client returns a 0 byte as an ack
+server and client create session key, C^s and S^c respectively
+client encrypts filename message using session key = Ek("FILENAME: [filename]")
+server saves filename and returns Ek("ACK FILENAME")
+client encrypts filesize and sends - message = Ek("FILESIZE: [file size]")
+server returns Ek("ACK FILESIZE")
+client encrypts file data in blocks and sends it block by block
+server sends Ek("ACK DATA") for each block recieved until full file is recieved
+client closes connection
+server saves data in filename and closes
